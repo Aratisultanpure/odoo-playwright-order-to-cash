@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        ODOO_USERNAME = credentials('ODOO_USERNAME')
+        ODOO_PASSWORD = credentials('ODOO_PASSWORD')
+    }
+
     stages {
 
         stage('Verify Node') {
