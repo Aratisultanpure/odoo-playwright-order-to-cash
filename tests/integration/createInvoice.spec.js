@@ -1,19 +1,13 @@
-const { test } = require('@playwright/test');
-const { LoginPage } = require('../../PageObject/LoginPage');
-const { SalesPage } = require('../../PageObject/SalesPage');
-const { QuotationPage } = require('../../PageObject/QuotationPage');
-const { CreateInvoicePage } = require('../../PageObject/CreateInvoicePage');
-const testData = require('../../utils/testData.json');
+import { test } from '@playwright/test';
+import { SalesPage } from '../../PageObject/SalesPage.js';
+import { QuotationPage } from '../../PageObject/QuotationPage.js';
+import { CreateInvoicePage } from '../../PageObject/CreateInvoicePage.js';
+import testData from '../../utils/testData.json' assert { type: 'json' };
 
 let createInvoicePage;
 
 test.beforeEach(async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  await loginPage.gotoLoginPage();
-  await loginPage.login(
-  process.env.ODOO_USERNAME,
-  process.env.ODOO_PASSWORD
-);
+  await page.goto('/odoo');
 
   const salesPage = new SalesPage(page);
   await salesPage.openSalesApp();
@@ -22,17 +16,22 @@ test.beforeEach(async ({ page }) => {
   const quotationPage = new QuotationPage(page);
   await quotationPage.enterCustomer(testData.customerName);
   await quotationPage.selectPaymentTerm(testData.paymentTerm);
-  await quotationPage.addOrderLine(testData.productName, testData.quantity); // adds line + confirms
+  await quotationPage.addOrderLine(
+    testData.productName,
+    testData.quantity
+  );
 
   createInvoicePage = new CreateInvoicePage(page);
   await createInvoicePage.expectOrderConfirmed();
 });
-//testcase-1
+
+// Test Case 1
 test('Create invoice - open invoice wizard @integration', async () => {
   await createInvoicePage.clickCreateInvoice();
   await createInvoicePage.expectInvoiceWizardOpened();
 });
-//testcase-2
+
+// Test Case 2
 test('Create invoice - generate draft invoice @integration', async () => {
   await createInvoicePage.clickCreateInvoice();
   await createInvoicePage.expectInvoiceWizardOpened();

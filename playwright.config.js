@@ -1,14 +1,39 @@
-require('dotenv').config();
-const { defineConfig } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
 
-module.exports = defineConfig({
+dotenv.config();
+
+export default defineConfig({
   testDir: './tests',
   timeout: 30000,
   retries: 1,
+
   use: {
-    baseURL: process.env.BASE_URL || 'https://testyantra.odoo.com',
-    headless: false,
-    slowMo: 1000
+    baseURL: process.env.BASE_URL,
+    headless: !!process.env.CI,
+    launchOptions: {
+      slowMo: process.env.CI ? 0 : 500,
+    },
   },
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
+
+  projects: [
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.js/,
+    },
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/auth.json',
+      },
+      dependencies: ['setup'],
+      testIgnore: /.*\.setup\.js/,
+    },
+  ],
+
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: 'playwright-report' }],
+  ],
 });

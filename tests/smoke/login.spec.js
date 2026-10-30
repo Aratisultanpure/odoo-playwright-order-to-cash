@@ -1,13 +1,10 @@
-const { test } = require('@playwright/test');
-const { LoginPage } = require('../../PageObject/LoginPage');
+import { test, expect } from '@playwright/test';
 
-test('Login smoke test @smoke', async ({ page }) => {
-  const loginPage = new LoginPage(page);
+test('Login validation @smoke', async ({ page }) => {
+  await page.goto('/odoo');
 
-  await loginPage.gotoLoginPage();
+  await expect(page).toHaveURL(/odoo/);
 
-  await loginPage.login(
-    process.env.ODOO_USERNAME,
-    process.env.ODOO_PASSWORD
-  );
+  // Verify user is actually logged in
+  await expect(page.getByText('Sales')).toBeVisible();
 });

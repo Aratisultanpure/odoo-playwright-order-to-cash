@@ -1,5 +1,6 @@
 // PageObject/LoginPage.js
-class LoginPage {
+
+export class LoginPage {
   constructor(page) {
     this.page = page;
     this.usernameInput = 'input[name="login"]';
@@ -8,16 +9,16 @@ class LoginPage {
   }
 
   async gotoLoginPage() {
-    await this.page.goto('/web/login'); // baseURL from config
+    await this.page.goto('/web/login');
   }
 
   async login(username, password) {
     await this.page.fill(this.usernameInput, username);
     await this.page.fill(this.passwordInput, password);
     await this.page.click(this.loginButton);
-    await this.page.locator('.o_main_navbar').waitFor({ state: 'visible', timeout: 15000 });
-    // ✅ No dashboard check here
+
+    await this.page
+      .locator('.o_main_navbar')
+      .waitFor({ state: 'visible', timeout: 15000 });
   }
 }
-
-module.exports = { LoginPage };

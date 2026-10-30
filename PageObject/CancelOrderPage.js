@@ -1,6 +1,6 @@
-const { expect } = require('@playwright/test');
+import { expect } from '@playwright/test';
 
-class CancelOrderPage {
+export class CancelOrderPage {
   constructor(page) {
     this.page = page;
 
@@ -23,17 +23,26 @@ class CancelOrderPage {
   }
 
   async cancelOrder() {
-    await expect(this.cancelButton).toBeVisible({ timeout: 10000 });
+    await expect(this.cancelButton).toBeVisible({
+      timeout: 10000
+    });
+
     await this.cancelButton.click();
 
-    await expect(this.wizardCancelButton).toBeVisible({ timeout: 10000 });
+    await expect(this.wizardCancelButton).toBeVisible({
+      timeout: 10000
+    });
+
     await this.wizardCancelButton.click();
   }
 
   async expectOrderCancelled() {
-    await expect(this.statusCurrent).toContainText('Cancelled', {
-      timeout: 15000
-    });
+    await expect(this.statusCurrent).toContainText(
+      'Cancelled',
+      {
+        timeout: 15000
+      }
+    );
   }
 
   async expectCreateInvoiceNotAvailable() {
@@ -42,5 +51,3 @@ class CancelOrderPage {
     });
   }
 }
-
-module.exports = { CancelOrderPage };
