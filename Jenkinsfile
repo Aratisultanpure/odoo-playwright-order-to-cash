@@ -4,6 +4,7 @@ pipeline {
     environment {
         ODOO_USERNAME = credentials('ODOO_USERNAME')
         ODOO_PASSWORD = credentials('ODOO_PASSWORD')
+        BASE_URL = 'https://testyantra.odoo.com'
     }
 
     stages {
