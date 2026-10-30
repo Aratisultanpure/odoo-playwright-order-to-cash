@@ -8,26 +8,19 @@ pipeline {
 
     stages {
 
-        stage('Verify Node') {
-            steps {
-                bat 'node -v'
-                bat 'npm -v'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 bat 'npm install'
             }
         }
 
-        stage('Install Playwright Browsers') {
+        stage('Install Browsers') {
             steps {
                 bat 'npx playwright install'
             }
         }
 
-        stage('Execute Tests') {
+        stage('Run Tests') {
             steps {
                 bat 'npx playwright test'
             }
@@ -37,12 +30,12 @@ pipeline {
     post {
         always {
             publishHTML([
-                allowMissing: false,
+                allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'playwright-report',
                 reportFiles: 'index.html',
-                reportName: 'Playwright Test Report'
+                reportName: 'Playwright Report'
             ])
         }
     }
