@@ -33,7 +33,7 @@ export default defineConfig({
   ],
 
   reporter: [
-    ['list'],
-    ['html', { outputFolder: 'playwright-report' }],
-  ],
+  ['blob'],
+  ['html', { outputFolder: 'playwright-report' }],
+],
 });
